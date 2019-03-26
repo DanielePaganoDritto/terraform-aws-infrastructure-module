@@ -1,4 +1,4 @@
-# aws-infrastructure-module
+# terraform-aws-infrastructure-module
 A Terraform module to create an AWS VPC
 - Create AWS Key-Pair
 - Create EC2 instance
