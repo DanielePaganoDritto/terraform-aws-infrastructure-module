@@ -17,5 +17,5 @@ resource "aws_instance" "this" {
   key_name               = "${var.key_name}"
   vpc_security_group_ids = ["${aws_security_group.this.id}"]
   subnet_id              = "${element(var.subnet_ids, count.index)}"
-  tags = "${merge(map("Name", format("%s-%s", var.instance_name, element(var.az_letter, count.index))), var.tags)}"
+  tags                   = "${merge(map("Name", format("%s-%s", var.instance_name, element(var.az_letter, count.index))), var.tags)}"
 }

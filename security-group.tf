@@ -13,7 +13,6 @@ resource "aws_security_group" "this" {
     cidr_blocks = ["${var.inbound_ip}"]
     description = "Enable SSH access"
   }
-  
   tags = "${merge(map("Name", format("%s-%s", var.instance_name, "sg")), var.tags)}"
 }
 

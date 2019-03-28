@@ -90,7 +90,7 @@ variable "create_ec2" {
 
 variable "number_of_instances" {
   description = "Number of EC2 instances to create"
-  default = "2"
+  default     = "2"
 }
 
 variable "public_ip_on_launch" {
@@ -105,7 +105,7 @@ variable "subnet_type" {
 
 variable "subnet_ids" {
   description = "ID of the subnet in which to deploy the instance"
-  default = []
+  default     = []
 }
 
 variable "instance_type" {
@@ -136,30 +136,132 @@ variable "security_group_ids" {
 #Load Balancer Variables
 variable "create_load_balancer" {
   description = "Should be set to true in order to create a new load balancer"
-  default = "false"
+  default     = "false"
 }
 
 variable "load_balancer_name" {
   description = "The name of the load balancer"
-  default = ""
+  default     = ""
 }
 
 variable "internal" {
   description = "Should be set to true in order to create an internal load balancer"
-  default = "false"
+  default     = "false"
 }
 
 variable "load_balancer_type" {
   description = "The Load Balancer type to create: application, network, classic"
-  default = "application"
+  default     = "application"
 }
 
 variable "load_balancer_security_group_id" {
   description = "The security group id of the load balancer"
-  default = ""
+  default     = ""
 }
 
-variable "enabled" {
+variable "enable_elb_logging" {
   description = "Should be set to true in order to enable elastic load balancer logging"
-  default = "false" 
+  default     = "false"
+}
+
+variable "s3_bucket_name" {
+  description = "The S3 bucket where to save elb logs"
+  default     = ""
+}
+
+variable "prefix" {
+  description = "The prefix of the elb logs directory in S3"
+  default     = ""
+}
+
+#Target Group Variables
+variable "attach_instances_to_target_group" {
+  description = "Should be set to true to enable instance attachment to a target group"
+  default     = "false"
+}
+
+variable "create_target_group" {
+  description = "Should be set to true in order to create a new target group"
+  default     = "false"
+}
+
+variable "target_group_name" {
+  description = "The name of the target group to create"
+  default     = ""
+}
+
+variable "target_group_type" {
+  description = "The type of targets you want to create: instance, ip, lambda"
+  default     = "instance"
+}
+
+variable "target_group_port" {
+  description = "The listening port of the target group to create"
+  default     = "80"
+}
+
+variable "target_group_protocol" {
+  description = "The protocol of the target group to create"
+  default     = "HTTP"
+}
+
+variable "health_check_interval" {
+  description = "The approximate amount of time between health checks of an individual target (5-300 seconds). Default 30s"
+  default     = "30"
+}
+
+variable "health_check_path" {
+  description = "The destination path for health checks. This path must begin with a '/' character"
+  default     = "/"
+}
+
+variable "health_check_timeout" {
+  description = "The amount of time, in seconds, during which no response means a failed health check (2-120 seconds)"
+  default     = "5"
+}
+
+variable "health_check_healty_threshold" {
+  description = "The number of consecutive health checks successes required before considering an unhealthy target healthy (2-10)"
+  default     = "5"
+}
+
+variable "health_check_unhealty_threshold" {
+  description = "The number of consecutive health check failures required before considering a target unhealthy (2-10)."
+  default     = "2"
+}
+
+variable "health_check_matcher" {
+  description = "The HTTP codes to use when checking for a successful response from a target (e.g. 200)"
+  default     = "200"
+}
+
+#Load Balancer Listener Variables
+variable "create_listener" {
+  description = "Should be set to true to create a listener"
+  default     = "false"
+}
+
+variable "listener_port" {
+  description = "The port number from which to listen to for traffic"
+  default     = "80"
+}
+
+variable "listener_protocol" {
+  description = "The protocol for connections from the client"
+  default     = "HTTP"
+}
+
+variable "listener_certificate_arn" {
+  description = "The ARN of the default SSL server certificate (Optional)."
+  default     = ""
+}
+
+variable "listener_action" {
+  description = "The type of routing action. Valid values are forward, redirect, fixed-response, authenticate-cognito and authenticate-oidc"
+  default     = ""
+}
+
+variable "listener_ssl_policy" {
+  description = "(Optional) The name of the SSL Policy for the listener. Required if protocol is HTTPS or TLS."
+  default     = ""
 }
