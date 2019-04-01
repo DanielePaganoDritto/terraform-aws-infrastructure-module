@@ -15,13 +15,13 @@ Below an example on how to use the module. You need to configure the AWS provide
 ```
 provider "aws" {
   region  = "eu-west-1"
-  profile = "Terraform"
+  profile = "terraform"
 }
 
 # Create Key Pair
 
 module "key-pair" {
-  source = "../aws-modules/aws-application-module/"
+  source = "../terraform-aws-infrastructure-module"
 
   create_key_pair = "false"
   key_name        = "test-key-pair"
@@ -29,8 +29,8 @@ module "key-pair" {
 }
 
 #Create EC2 Instance
-module "ec2" {
-  source = "../aws-modules/aws-application-module/"
+module "frontend_apps" {
+  source = "../terraform-aws-infrastructure-module"
 
   # Select Availability Zones and Create Subnets
   azs       = ["eu-west-1a", "eu-west-1b"]
@@ -38,15 +38,15 @@ module "ec2" {
 
   # Global tags
   tags = {
-    "App Name" = "gargolla"
+    "App Name" = "test-app"
     "Env"      = "test"
   }
 
   # Create Security Group with default ssh
   create_security_group = "true"
-  vpc_id                = "vpc-5d547e3b"
+  vpc_id                = "my_vpc_id"  //Replace "my_vpc_id" with the VPC id where you want to deploy 
   security_group_name   = "test-sg"
-  inbound_ip            = ["54.245.117.134/32"]
+  inbound_ip            = ["My_Public_IP"]   //Replace "My_Public_IP" with your own Public IP
 
   # Add rule to security group
   add_rule         = "false"
@@ -58,21 +58,29 @@ module "ec2" {
   create_ec2          = "true"
   number_of_instances = "2"
   instance_name       = "ws-prod"
-  key_name            = "test-key-pair"
+  key_name            = "fagiano"
   script_path         = "linux_initial_setup.sh"
-  subnet_ids          = ["subnet-826sf8f1", "subnet-04b78819"]
+  subnet_ids          = ["subnet-804f38c8", "subnet-0cb91856"]
   public_ip_on_launch = "false"
 
   #Create Public Load Balancer
   create_load_balancer = "true"
   load_balancer_name   = "prod-elb"
-  load_balancer_type   = "application"
+  load_balancer_type   = "network"
 
-  #Create load balancer's target group
-  create_target_group   = "true"
+  #Create application load balancer's target group
+  create_application_lb_target_group   = "false"
   target_group_name     = "test-tg"
   target_group_type     = "instance"
   target_group_protocol = "HTTP"
+
+  #Create network load balancer's target group
+  create_network_lb_target_group   = "true"
+  target_group_name     = "network-tg"
+  target_group_type     = "instance"
+  target_group_protocol = "TCP"
+  health_check_healty_threshold     = "5"
+  health_check_unhealty_threshold   = "5"
 
   #Attach instances to target group
   attach_instances_to_target_group = "true"
@@ -85,7 +93,7 @@ module "ec2" {
   #Create Listener
   create_listener   = "true"
   listener_port     = "80"
-  listener_protocol = "HTTP"
+  listener_protocol = "TCP"
   listener_action   = "forward"
 }
 
