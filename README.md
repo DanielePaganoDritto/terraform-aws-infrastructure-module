@@ -63,18 +63,18 @@ module "frontend_apps" {
   subnet_ids          = ["subnet-804f38c8", "subnet-0cb91856"]
   public_ip_on_launch = "false"
 
-  #Create Network Public Load Balancer
+  #Create Public Network Load Balancer
   create_network_load_balancer = "true"
   load_balancer_name   = "prod-elb"
   load_balancer_type   = "network"
 
-  #Create Application Public Load Balancer
+  #Create Public Application Load Balancer
   create_application_load_balancer = "false"
   application_load_balancer_security_group_ids = ["sg-0851beadf34d5bdaa"]
   load_balancer_name   = "prod-elb"
   load_balancer_type   = "network"
 
-  #Create application load balancer's target group
+  #Create Application load balancer's target group
   create_application_lb_target_group   = "false"
   target_group_name     = "test-tg"
   target_group_type     = "instance"
