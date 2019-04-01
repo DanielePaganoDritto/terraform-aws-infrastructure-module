@@ -63,8 +63,14 @@ module "frontend_apps" {
   subnet_ids          = ["subnet-804f38c8", "subnet-0cb91856"]
   public_ip_on_launch = "false"
 
-  #Create Public Load Balancer
-  create_load_balancer = "true"
+  #Create Network Public Load Balancer
+  create_network_load_balancer = "true"
+  load_balancer_name   = "prod-elb"
+  load_balancer_type   = "network"
+
+  #Create Application Public Load Balancer
+  create_application_load_balancer = "false"
+  application_load_balancer_security_group_ids = ["sg-0851beadf34d5bdaa"]
   load_balancer_name   = "prod-elb"
   load_balancer_type   = "network"
 
