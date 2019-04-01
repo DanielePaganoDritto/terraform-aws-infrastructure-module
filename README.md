@@ -3,8 +3,10 @@ A Terraform module to create an AWS VPC
 - Create AWS Key-Pair
 - Create EC2 instance
 - Create Security Group and Security Group Rules
-- Create Application Load Balancer (ALB) and Listener
+- Create Application and Network Load Balancer
 - Create Target Group 
+- Create Load balancers Listener
+  - SSL certificates are not yet managed by this script
 
 ## Module Usage
 

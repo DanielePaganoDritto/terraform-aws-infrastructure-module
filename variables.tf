@@ -180,7 +180,12 @@ variable "attach_instances_to_target_group" {
   default     = "false"
 }
 
-variable "create_target_group" {
+variable "create_application_lb_target_group" {
+  description = "Should be set to true in order to create a new target group"
+  default     = "false"
+}
+
+variable "create_network_lb_target_group" {
   description = "Should be set to true in order to create a new target group"
   default     = "false"
 }
