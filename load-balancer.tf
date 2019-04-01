@@ -1,6 +1,24 @@
-#Create Load Balancer: Application or Network Load Balancer
-resource "aws_lb" "elb" {
-  count              = "${var.create_load_balancer ? 1: 0}"
+#Create Application Load Balancer
+resource "aws_lb" "application_elb" {
+  count              = "${var.create_application_load_balancer ? 1: 0}"
+  name               = "${var.load_balancer_name}"
+  internal           = "${var.internal}"
+  load_balancer_type = "${var.load_balancer_type}"
+  subnets            = ["${var.subnet_ids}"]
+  security_groups    = ["${var.application_load_balancer_security_group_ids}"]
+
+  enable_deletion_protection = false
+
+  access_logs {
+    bucket  = "${var.s3_bucket_name}"
+    prefix  = "${var.prefix}"
+    enabled = "${var.enable_elb_logging}"
+  }
+}
+
+#Create Netwotk Load Balancer
+resource "aws_lb" "network_elb" {
+  count              = "${var.create_network_load_balancer ? 1: 0}"
   name               = "${var.load_balancer_name}"
   internal           = "${var.internal}"
   load_balancer_type = "${var.load_balancer_type}"
@@ -71,9 +89,9 @@ resource "aws_lb_target_group_attachment" "network_attach" {
 }
 
 #Create Application Load Balancer Listener. SSL certificate management missing.
-resource "aws_lb_listener" "applicaton_elb" {
-  count             = "${var.create_listener && var.create_load_balancer && var.create_application_lb_target_group ? 1 : 0}"
-  load_balancer_arn = "${aws_lb.elb.arn}"
+resource "aws_lb_listener" "applicaton_listener" {
+  count             = "${var.create_listener && var.create_application_load_balancer && var.create_application_lb_target_group ? 1 : 0}"
+  load_balancer_arn = "${aws_lb.application_elb.arn}"
   port              = "${var.listener_port}"
   protocol          = "${var.listener_protocol}"
   certificate_arn   = "${var.listener_certificate_arn}"
@@ -87,9 +105,9 @@ resource "aws_lb_listener" "applicaton_elb" {
 
 #Create Network Load Balancer Listener. SSL certificate management missing.
 
-resource "aws_lb_listener" "network_elb" {
-  count             = "${var.create_listener && var.create_load_balancer && var.create_network_lb_target_group ? 1 : 0}"
-  load_balancer_arn = "${aws_lb.elb.arn}"
+resource "aws_lb_listener" "network_listener" {
+  count             = "${var.create_listener && var.create_network_load_balancer && var.create_network_lb_target_group ? 1 : 0}"
+  load_balancer_arn = "${aws_lb.network_elb.arn}"
   port              = "${var.listener_port}"
   protocol          = "${var.listener_protocol}"
   certificate_arn   = "${var.listener_certificate_arn}"

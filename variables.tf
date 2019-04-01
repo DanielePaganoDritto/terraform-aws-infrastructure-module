@@ -134,7 +134,12 @@ variable "security_group_ids" {
 }
 
 #Load Balancer Variables
-variable "create_load_balancer" {
+variable "create_application_load_balancer" {
+  description = "Should be set to true in order to create a new load balancer"
+  default     = "false"
+}
+
+variable "create_network_load_balancer" {
   description = "Should be set to true in order to create a new load balancer"
   default     = "false"
 }
@@ -154,9 +159,9 @@ variable "load_balancer_type" {
   default     = "application"
 }
 
-variable "load_balancer_security_group_id" {
+variable "application_load_balancer_security_group_ids" {
   description = "The security group id of the load balancer"
-  default     = ""
+  default     = []
 }
 
 variable "enable_elb_logging" {
