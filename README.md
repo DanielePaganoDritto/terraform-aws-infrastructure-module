@@ -5,8 +5,13 @@ A Terraform module to create an AWS VPC
 - Create Security Group and Security Group Rules
 - Create Application and Network Load Balancer
 - Create Target Group 
-- Create Load balancers Listener
+- Create Load balancers Listener:
   - SSL certificates are not yet managed by this script
+- RDS: source:https://github.com/terraform-aws-modules/terraform-aws-rds
+  - create DB Subnet Group
+  - Create DB Option Group
+  - Create DB Parameter Group
+  - Create RDS DB Instance
 
 ## Module Usage
 
@@ -101,6 +106,41 @@ module "frontend_apps" {
   listener_port     = "80"
   listener_protocol = "TCP"
   listener_action   = "forward"
+
+  #Create Subnet Group
+  create_subnet_group = "true"
+  subnet_group_name   = "subnet_group"
+  subnet_group_identifier = "test database instances"
+  db_subnet_ids = ["subnet-804f38c8", "subnet-0cb91856"]
+
+  #Create RDS Instance
+  create_rds = "true"
+  rds_identifier = "test-db"
+  rds_engine = "mysql"
+  rds_engine_version = "5.7"
+  rds_instance_class = "db.t2.micro"
+  rds_allocated_storage = "10"
+  rds_storage_type = "gp2"
+  db_name = "mydb"
+  db_username = "db_adm"
+  db_password = "db_adm_pwd"
+  db_subnet_group_name = "subnet_group"
+  db_port = "3306"
+  rds_parameter_group_name = "test-pg"
+  rds_option_group_name = "test"
+
+  #Create RDS Parameter Group
+  create_parameter_group = "true"
+  parameter_group_name = "test-pg"
+  parameter_group_description = "test parameter group"
+  parameter_group_family = "mysql5.7"
+
+  #Create RDS Option Group
+  create_option_group = "true"
+  option_group_name = "test"
+  option_group_identifier = "mysql_og"
+  engine_name = "mysql"
+  major_engine_version = "5.7"
 }
 
 ```
