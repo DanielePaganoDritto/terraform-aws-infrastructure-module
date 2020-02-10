@@ -1,4 +1,9 @@
 #### Tags Variables
+variable "region" {
+  description = "The AWS region in which to create the resources"
+  default     = ""
+}
+
 variable "instance_name" {
   description = "The name of the application to deploy"
   default     = ""
